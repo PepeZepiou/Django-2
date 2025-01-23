@@ -16,13 +16,29 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 
 import authentification.views
 import blog.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', authentification.views.login_page, name='login'),
-    path('logout/', authentification.views.logout_user, name='logout'),
+    path('', LoginView.as_view(
+            template_name = 'authentification/login.html',
+            redirect_authenticated_user=True),
+        name='login'),
+    path('logout/', LogoutView.as_view(
+            template_name = 'authentification/logout.html'
+            ),
+        name='logout'),
+        path('changePassword/', PasswordChangeView.as_view(
+            template_name = 'authentification/changePassword.html',
+            success_url = 'Done/'
+            ),
+            name='changePassword'),
+        path('changePassword/Done/', PasswordChangeDoneView.as_view(
+            template_name = 'authentification/changePasswordDone.html'
+            ),
+        name='Done'),
     path('home/', blog.views.home, name='home'),
 ]

@@ -4,10 +4,20 @@
     </head>
     <body>
         <h1>FotoBlog</h1>
+        <p>{{ message }}</p>
         {% block content %}
         {% endblock content %}
         {% if user.is_authenticated %}
-            <p>Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
+            <p>Vous êtes connecté en tant que {{ request.user }}. 
+                <form method="POST", action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit"> Se déconnecter</button>
+                </form>
+                <form method="POST", action="{% url 'changePassword' %}">
+                    {% csrf_token %}
+                    <button type="submit"> Changer de mot de passe </button>
+                </form>
+            </p>
         {% endif %}
     </body>
 </html>
